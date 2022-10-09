@@ -11,9 +11,11 @@ GPIO.setup(PIN_IR, GPIO.IN)     # set the PIN_OUT OUTPUT mode
 
 try:
     while True:
+        GPIO.output(PIN_OUT, GPIO.LOW)
+
         ir = GPIO.input(PIN_IR)
         print("ir input: " + str(ir))
-        if ir:
+        if not ir:
             GPIO.output(PIN_OUT, GPIO.HIGH)
         else:
             GPIO.output(PIN_OUT, GPIO.LOW)
