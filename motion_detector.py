@@ -15,9 +15,8 @@ try:
         print("ir input: " + str(ir))
         if ir:
             GPIO.output(PIN_LED, GPIO.HIGH)
-            time.sleep(1)
-
-        GPIO.output(PIN_LED, GPIO.LOW)
+        else:
+            GPIO.output(PIN_LED, GPIO.LOW)
         time.sleep(1)
 
 finally:
