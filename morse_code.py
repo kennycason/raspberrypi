@@ -19,7 +19,7 @@ try:
             GPIO.output(PIN_OUT, GPIO.HIGH)
         else:
             GPIO.output(PIN_OUT, GPIO.LOW)
-        time.sleep(1)
 
+        time.sleep(0.2)
 finally:
     GPIO.cleanup()
