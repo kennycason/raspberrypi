@@ -13,6 +13,7 @@ A1 = 0x41
 A2 = 0x42
 A3 = 0x43
 bus = smbus.SMBus(0)            ##start the bus
+time.sleep(1)
 
 def analogRead(count):   #function,read analog data
     read_val = bus.read_byte_data(address,cmd+count)
