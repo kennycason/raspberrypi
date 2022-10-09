@@ -12,7 +12,7 @@ A0 = 0x40      ##A0  ----> port address
 A1 = 0x41
 A2 = 0x42
 A3 = 0x43
-bus = smbus.SMBus(1)            ##start the bus
+bus = smbus.SMBus(0)            ##start the bus
 
 def analogRead(count):   #function,read analog data
     read_val = bus.read_byte_data(address,cmd+count)
