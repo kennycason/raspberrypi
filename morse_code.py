@@ -11,8 +11,6 @@ GPIO.setup(PIN_IR, GPIO.IN)     # set the PIN_OUT OUTPUT mode
 
 try:
     while True:
-        GPIO.output(PIN_OUT, GPIO.LOW)
-
         ir = GPIO.input(PIN_IR)
         print("ir input: " + str(ir))
         if not ir:
@@ -20,6 +18,6 @@ try:
         else:
             GPIO.output(PIN_OUT, GPIO.LOW)
 
-        time.sleep(0.2)
+        time.sleep(0.05)
 finally:
     GPIO.cleanup()
