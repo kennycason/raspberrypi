@@ -12,10 +12,12 @@ GPIO.setup(PIN_IR, GPIO.IN)     # set the PIN_LED OUTPUT mode
 try:
     while True:
         ir = GPIO.input(PIN_IR)
+        print("ir input: " + str(ir))
         if ir:
             GPIO.output(PIN_LED, GPIO.HIGH)
-        else:
-            GPIO.output(PIN_LED, GPIO.LOW)
+            time.sleep(1)
+
+        GPIO.output(PIN_LED, GPIO.LOW)
         time.sleep(1)
 
 finally:
