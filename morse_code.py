@@ -18,6 +18,6 @@ try:
         else:
             GPIO.output(PIN_OUT, GPIO.LOW)
 
-        time.sleep(0.2)
+        # time.sleep(0.2)
 finally:
     GPIO.cleanup()
