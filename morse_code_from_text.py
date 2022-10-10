@@ -18,7 +18,7 @@ GPIO.setup(PIN_IR, GPIO.IN)  # set the PIN_OUT OUTPUT mode
 # The space between letters is three units
 # The space between words is seven units.
 
-UNIT_TIME = 0.5  # seconds
+UNIT_TIME = 0.2  # seconds
 DOT_UNITS = 1
 DASH_UNITS = 3
 SIGNAL_BREAK_UNITS = 1
