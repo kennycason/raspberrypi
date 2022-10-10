@@ -71,16 +71,20 @@ bus = smbus.SMBus(1)  # start the bus
 
 
 def analogRead(count):
-    read_val = bus.read_byte_data(address, cmd + count)
-    return read_val
+    while True:
+        try:
+            return bus.read_byte_data(address, cmd + count)
+        except OSError:
+            time.sleep(0.02)
+            pass
 
 
 def read_symbols():
     while True:
         value = analogRead(0)  # read A0 data
 
-        print("data:%1.0f" % value)
-        time.sleep(0.05)
+        print("data: %1.0f" % value)
+        # time.sleep(0.05)
 
 
 try:
