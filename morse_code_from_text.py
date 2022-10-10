@@ -63,15 +63,14 @@ SYMBOL_MAP: Dict[str, List[Signal]] = {
 
 def write_signal(signal: Signal):
     print(signal)
-    if signal == Signal.DOT:
-        GPIO.output(PIN_OUT, GPIO.HIGH)
-        time.sleep(DOT_UNITS * UNIT_TIME)
-        GPIO.output(PIN_OUT, GPIO.LOW)
-    elif signal == Signal.DASH:
-        GPIO.output(PIN_OUT, GPIO.HIGH)
-        time.sleep(DASH_UNITS * UNIT_TIME)
-        GPIO.output(PIN_OUT, GPIO.LOW)
+    GPIO.output(PIN_OUT, GPIO.HIGH)
 
+    if signal == Signal.DOT:
+        time.sleep(DOT_UNITS * UNIT_TIME)
+    elif signal == Signal.DASH:
+        time.sleep(DASH_UNITS * UNIT_TIME)
+
+    GPIO.output(PIN_OUT, GPIO.LOW)
     time.sleep(SIGNAL_BREAK_UNITS)
 
 
