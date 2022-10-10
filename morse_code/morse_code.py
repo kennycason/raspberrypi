@@ -1,34 +1,28 @@
 from enum import Enum
 from typing import Dict, List
 
-import RPi.GPIO as GPIO
-import time
-
-PIN_IR: int = 17
-PIN_OUT: int = 18  # LED or Buzzer
-
-GPIO.setmode(GPIO.BCM)  # use BCM numbers
-GPIO.setup(PIN_OUT, GPIO.OUT)  # set the PIN_LED OUTPUT mode
-GPIO.output(PIN_OUT, GPIO.LOW)  # make PIN_OUT output LOW level
-GPIO.setup(PIN_IR, GPIO.IN)  # set the PIN_OUT OUTPUT mode
-
 # The length of a dot is one unit
 # A dash is three units
 # The space between parts of the same letter is one unit
 # The space between letters is three units
 # The space between words is seven units.
 
-UNIT_TIME = 0.1  # seconds
 DOT_UNITS = 1
 DASH_UNITS = 3
 SIGNAL_BREAK_UNITS = 1
 SYMBOL_BREAK_UNITS = 3
 WORD_BREAK_UNITS = 7
 
+UNIT_TIME = 0.1  # seconds
+DOT_TIME = UNIT_TIME * DOT_UNITS
+DASH_TIME = UNIT_TIME * DASH_UNITS
+SIGNAL_BREAK_TIME = UNIT_TIME * SIGNAL_BREAK_UNITS
+SYMBOL_BREAK_TIME = UNIT_TIME * SYMBOL_BREAK_UNITS
+WORD_BREAK_TIME = UNIT_TIME * WORD_BREAK_UNITS
+
 class Signal(Enum):
     DOT = 1
     DASH = 2
-
 
 SYMBOL_MAP: Dict[str, List[Signal]] = {
     ' ': [],
@@ -59,46 +53,3 @@ SYMBOL_MAP: Dict[str, List[Signal]] = {
     'Y': [Signal.DASH, Signal.DOT, Signal.DASH, Signal.DASH],
     'Z': [Signal.DASH, Signal.DASH, Signal.DOT, Signal.DOT]
 }
-
-
-def write_signal(signal: Signal):
-    print(signal)
-    GPIO.output(PIN_OUT, GPIO.HIGH)
-
-    if signal == Signal.DOT:
-        time.sleep(DOT_UNITS * UNIT_TIME)
-    elif signal == Signal.DASH:
-        time.sleep(DASH_UNITS * UNIT_TIME)
-
-    GPIO.output(PIN_OUT, GPIO.LOW)
-    time.sleep(SIGNAL_BREAK_UNITS)
-
-
-def write_symbol(symbol: str):
-    symbol = symbol.upper()
-
-    if symbol not in SYMBOL_MAP:
-        print("Symbol not found: [" + str(symbol) + "]")
-        return
-
-    signals = SYMBOL_MAP[symbol]
-    for signal in signals:
-        write_signal(signal)
-
-    if symbol == ' ':
-        print('SPACE')
-        time.sleep(WORD_BREAK_UNITS * UNIT_TIME)
-    else:
-        print('SYMBOL BREAK')
-        time.sleep(SYMBOL_BREAK_UNITS)
-
-
-def write_symbols(symbols: str):
-    for symbol in symbols:
-        write_symbol(symbol)
-
-
-try:
-    write_symbols("HELLO WORLD")
-finally:
-    GPIO.cleanup()
