@@ -18,9 +18,10 @@ GPIO.setup(PIN_IR, GPIO.IN)  # set the PIN_OUT OUTPUT mode
 # The space between letters is three units
 # The space between words is seven units.
 
-UNIT_TIME = 0.5  # seconds
+UNIT_TIME = 1  # seconds
 DOT_UNITS = 1
 DASH_UNITS = 3
+SIGNAL_BREAK_UNITS = 1
 SYMBOL_BREAK_UNITS = 3
 WORD_BREAK_UNITS = 7
 
@@ -30,6 +31,7 @@ class Signal(Enum):
 
 
 SYMBOL_MAP: Dict[str, List[Signal]] = {
+    ' ': [],
     'A': [Signal.DOT, Signal.DASH],
     'B': [Signal.DASH, Signal.DOT, Signal.DOT, Signal.DOT],
     'C': [Signal.DASH, Signal.DOT, Signal.DASH, Signal.DOT],
@@ -55,11 +57,12 @@ SYMBOL_MAP: Dict[str, List[Signal]] = {
     'W': [Signal.DOT, Signal.DASH, Signal.DASH],
     'X': [Signal.DASH, Signal.DOT, Signal.DOT, Signal.DASH],
     'Y': [Signal.DASH, Signal.DOT, Signal.DASH, Signal.DASH],
-    'Z': [Signal.DASH, Signal.DASH, Signal.DOT, Signal.DOT],
+    'Z': [Signal.DASH, Signal.DASH, Signal.DOT, Signal.DOT]
 }
 
 
 def write_signal(signal: Signal):
+    print(signal)
     if signal == Signal.DOT:
         GPIO.output(PIN_OUT, GPIO.HIGH)
         time.sleep(DOT_UNITS * UNIT_TIME)
@@ -69,13 +72,11 @@ def write_signal(signal: Signal):
         time.sleep(DOT_UNITS * UNIT_TIME)
         GPIO.output(PIN_OUT, GPIO.LOW)
 
+    time.sleep(SIGNAL_BREAK_UNITS)
+
 
 def write_symbol(symbol: str):
     symbol = symbol.upper()
-
-    if symbol == ' ':
-        time.sleep(WORD_BREAK_UNITS * UNIT_TIME)
-        return
 
     if symbol not in SYMBOL_MAP:
         print("Symbol not found: [" + str(symbol) + "]")
@@ -85,7 +86,12 @@ def write_symbol(symbol: str):
     for signal in signals:
         write_signal(signal)
 
-    time.sleep(SYMBOL_BREAK_UNITS)
+    if symbol == ' ':
+        print('SPACE')
+        time.sleep(WORD_BREAK_UNITS * UNIT_TIME)
+    else:
+        print('SYMBOL BREAK')
+        time.sleep(SYMBOL_BREAK_UNITS)
 
 
 def write_symbols(symbols: str):
@@ -94,7 +100,6 @@ def write_symbols(symbols: str):
 
 
 try:
-    write_symbol("A")
-    write_symbols("ABC")
+    write_symbols("HELLO WORLD")
 finally:
     GPIO.cleanup()
