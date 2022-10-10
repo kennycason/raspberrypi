@@ -18,7 +18,7 @@ GPIO.setup(PIN_IR, GPIO.IN)  # set the PIN_OUT OUTPUT mode
 # The space between letters is three units
 # The space between words is seven units.
 
-UNIT_TIME = 1  # seconds
+UNIT_TIME = 0.5  # seconds
 DOT_UNITS = 1
 DASH_UNITS = 3
 SIGNAL_BREAK_UNITS = 1
@@ -69,7 +69,7 @@ def write_signal(signal: Signal):
         GPIO.output(PIN_OUT, GPIO.LOW)
     elif signal == Signal.DASH:
         GPIO.output(PIN_OUT, GPIO.HIGH)
-        time.sleep(DOT_UNITS * UNIT_TIME)
+        time.sleep(DASH_UNITS * UNIT_TIME)
         GPIO.output(PIN_OUT, GPIO.LOW)
 
     time.sleep(SIGNAL_BREAK_UNITS)
