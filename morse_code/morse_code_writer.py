@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-from morse_code.morse_code import Signal, DOT_TIME, DASH_TIME, SIGNAL_BREAK_TIME, SYMBOL_MAP, SYMBOL_BREAK_TIME, \
+from morse_code import Signal, DOT_TIME, DASH_TIME, SIGNAL_BREAK_TIME, SYMBOL_MAP, SYMBOL_BREAK_TIME, \
     WORD_BREAK_TIME
 
 PIN_OUT = 18                    # LED or Buzzer
