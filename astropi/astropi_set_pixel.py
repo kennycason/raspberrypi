@@ -1,5 +1,6 @@
 from sense_hat import SenseHat
 import random
+import time
 
 sense = SenseHat()
 
@@ -13,3 +14,4 @@ while True:
     sense.set_pixel(3, 6, random_color)
     sense.set_pixel(4, 6, random_color)
     sense.set_pixel(5, 5, random_color)
+    time.sleep(1)
