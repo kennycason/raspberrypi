@@ -38,6 +38,7 @@ try:
         ir = GPIO.input(PIN_IN)
         if ir:
             capture_photo(i)
+            time.sleep(1)
 
         time.sleep(0.02)
         i += 1
