@@ -1,3 +1,3 @@
 #!/bin/sh
 
-rsync -zvhr $(pwd)/* spider.local:~/python/raspberrypi/
+rsync -zvhr --exclude 'venv' $(pwd)/* spider.local:~/python/raspberrypi/
