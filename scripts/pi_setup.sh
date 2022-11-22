@@ -10,6 +10,7 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 
 sudo apt install vim
 sudo apt install libpigpio-dev
+pip install RPi.GPIO
 
 # python/opencv
 pip install -U numpy
