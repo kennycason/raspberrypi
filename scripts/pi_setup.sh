@@ -25,7 +25,12 @@ sudo apt install -y python3-picamera2
 # astropi
 sudo apt-get install sense-hat
 
+# NRF24 Wireless Transmitter/Receiver
+# https://github.com/bjarne-hansen/py-nrf24
+sudo apt-get install pigpio python-pigpio python3-pigpio
+pip install nrf24
+
 #sudo apt-get install python-pip python-dev
-#sudo pip install RPi.GPIO
-#sudo pip install wiringPi
-#sudo pip install gpio
+#pip install RPi.GPIO
+#pip install wiringPi
+#pip install gpio

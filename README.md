@@ -28,10 +28,25 @@ rb	0	0=normal, 1=reduced blanking
 #### Copy project to Pi
 
 ```bash
-rsync -azvh robotics spider.local:~/python/ 
+rsync -azvh robotics spider.local:~/ --exclude venv/
 ```
 
+#### Venv Setup
 ```bash
+pip install virtualenv
 virtualenv -p python3.9.15 venv
+source venv/bin/activate
+```
 
+
+#### Stream Video over TCP
+
+Server (spider.local)
+```bash
+libcamera-vid -t 0  -q 100 --framerate 3 -n --codec mjpeg --inline --listen -o tcp://192.168.4.76:8888 -v
+```
+
+Client (VLC -> Open Network)
+```bash
+tcp/mjpeg://192.168.4.76:8888
 ```
