@@ -1,99 +1,124 @@
 import RPi.GPIO as GPIO
 import time
 
-RT_PIN_ENABLE_A = 25
-RT_PIN_IN1 = 24
-RT_PIN_IN2 = 23
+R_PIN_ENABLE_A = 25
+R_PIN_IN1 = 24
+R_PIN_IN2 = 23
 
-LT_PIN_ENABLE_A = 16
-LT_PIN_IN1 = 20
-LT_PIN_IN2 = 26
+L_PIN_ENABLE_A = 16
+L_PIN_IN1 = 20
+L_PIN_IN2 = 26
+
+speed = 50
 
 GPIO.setmode(GPIO.BCM)  # use BCM numbers
 
 # Left Track
-GPIO.setup(LT_PIN_IN1, GPIO.OUT)
-GPIO.setup(LT_PIN_IN2, GPIO.OUT)
-GPIO.setup(LT_PIN_ENABLE_A, GPIO.OUT)
+GPIO.setup(L_PIN_IN1, GPIO.OUT)
+GPIO.setup(L_PIN_IN2, GPIO.OUT)
+GPIO.setup(L_PIN_ENABLE_A, GPIO.OUT)
 
-GPIO.setup(LT_PIN_IN1, GPIO.LOW)
-GPIO.setup(LT_PIN_IN2, GPIO.LOW)
-LT_P = GPIO.PWM(LT_PIN_ENABLE_A, 1000)
-LT_P.start(0)
+GPIO.setup(L_PIN_IN1, GPIO.LOW)
+GPIO.setup(L_PIN_IN2, GPIO.LOW)
+L_PWM = GPIO.PWM(L_PIN_ENABLE_A, 1000)
+L_PWM.start(0)
+# L_PWM.ChangeDutyCycle(speed)
 
 # Right Track
-GPIO.setup(RT_PIN_IN1, GPIO.OUT)
-GPIO.setup(RT_PIN_IN2, GPIO.OUT)
-GPIO.setup(RT_PIN_ENABLE_A, GPIO.OUT)
+GPIO.setup(R_PIN_IN1, GPIO.OUT)
+GPIO.setup(R_PIN_IN2, GPIO.OUT)
+GPIO.setup(R_PIN_ENABLE_A, GPIO.OUT)
 
-GPIO.setup(RT_PIN_IN1, GPIO.LOW)
-GPIO.setup(RT_PIN_IN2, GPIO.LOW)
-RT_P = GPIO.PWM(RT_PIN_ENABLE_A, 1000)
-RT_P.start(0)
+GPIO.setup(R_PIN_IN1, GPIO.LOW)
+GPIO.setup(R_PIN_IN2, GPIO.LOW)
+R_PWM = GPIO.PWM(R_PIN_ENABLE_A, 1000)
+R_PWM.start(0)
+# R_PWM.ChangeDutyCycle(speed)
 
+speed = 100
 
 def turn_left():
     print("turn left")
-    GPIO.output(LT_PIN_IN1, GPIO.LOW)
-    GPIO.output(LT_PIN_IN2, GPIO.LOW)
-    GPIO.output(RT_PIN_IN1, GPIO.LOW)
-    GPIO.output(RT_PIN_IN2, GPIO.HIGH)
+    GPIO.output(L_PIN_IN1, GPIO.LOW)
+    GPIO.output(L_PIN_IN2, GPIO.LOW)
+    GPIO.output(R_PIN_IN1, GPIO.LOW)
+    GPIO.output(R_PIN_IN2, GPIO.HIGH)
 
 
 def turn_right():
     print("turn right")
-    GPIO.output(LT_PIN_IN1, GPIO.LOW)
-    GPIO.output(LT_PIN_IN2, GPIO.HIGH)
-    GPIO.output(RT_PIN_IN1, GPIO.LOW)
-    GPIO.output(RT_PIN_IN2, GPIO.LOW)
+    GPIO.output(L_PIN_IN1, GPIO.LOW)
+    GPIO.output(L_PIN_IN2, GPIO.HIGH)
+    GPIO.output(R_PIN_IN1, GPIO.LOW)
+    GPIO.output(R_PIN_IN2, GPIO.LOW)
 
 
 def left_track_forward():
     print("left track forward")
-    GPIO.output(LT_PIN_IN1, GPIO.LOW)
-    GPIO.output(LT_PIN_IN2, GPIO.HIGH)
+    GPIO.output(L_PIN_IN1, GPIO.LOW)
+    GPIO.output(L_PIN_IN2, GPIO.HIGH)
 
 
 def left_track_backward():
     print("left track backward")
-    GPIO.output(LT_PIN_IN1, GPIO.LOW)
-    GPIO.output(LT_PIN_IN2, GPIO.HIGH)
+    GPIO.output(L_PIN_IN1, GPIO.LOW)
+    GPIO.output(L_PIN_IN2, GPIO.HIGH)
 
 
 def right_track_forward():
     print("right track forward")
-    GPIO.output(RT_PIN_IN1, GPIO.LOW)
-    GPIO.output(RT_PIN_IN2, GPIO.HIGH)
+    GPIO.output(R_PIN_IN1, GPIO.LOW)
+    GPIO.output(R_PIN_IN2, GPIO.HIGH)
 
 
 def right_track_backward():
     print("right track backward")
-    GPIO.output(RT_PIN_IN1, GPIO.HIGH)
-    GPIO.output(RT_PIN_IN2, GPIO.LOW)
+    GPIO.output(R_PIN_IN1, GPIO.HIGH)
+    GPIO.output(R_PIN_IN2, GPIO.LOW)
 
 
 def move_forward():
     print("forward")
-    GPIO.output(LT_PIN_IN1, GPIO.LOW)
-    GPIO.output(LT_PIN_IN2, GPIO.HIGH)
-    GPIO.output(RT_PIN_IN1, GPIO.LOW)
-    GPIO.output(RT_PIN_IN2, GPIO.HIGH)
+    GPIO.output(L_PIN_IN1, GPIO.LOW)
+    GPIO.output(L_PIN_IN2, GPIO.HIGH)
+    GPIO.output(R_PIN_IN1, GPIO.LOW)
+    GPIO.output(R_PIN_IN2, GPIO.HIGH)
 
 
 def backward():
     print("backward")
-    GPIO.output(LT_PIN_IN1, GPIO.HIGH)
-    GPIO.output(LT_PIN_IN2, GPIO.LOW)
-    GPIO.output(RT_PIN_IN1, GPIO.HIGH)
-    GPIO.output(RT_PIN_IN2, GPIO.LOW)
+    GPIO.output(L_PIN_IN1, GPIO.HIGH)
+    GPIO.output(L_PIN_IN2, GPIO.LOW)
+    GPIO.output(R_PIN_IN1, GPIO.HIGH)
+    GPIO.output(R_PIN_IN2, GPIO.LOW)
 
 
 def stop():
     print("stop")
-    GPIO.output(LT_PIN_IN1, GPIO.LOW)
-    GPIO.output(LT_PIN_IN2, GPIO.LOW)
-    GPIO.output(RT_PIN_IN1, GPIO.LOW)
-    GPIO.output(RT_PIN_IN2, GPIO.LOW)
+    GPIO.output(L_PIN_IN1, GPIO.LOW)
+    GPIO.output(L_PIN_IN2, GPIO.LOW)
+    GPIO.output(R_PIN_IN1, GPIO.LOW)
+    GPIO.output(R_PIN_IN2, GPIO.LOW)
+
+
+def speed_up():
+    global speed
+    print("speed++")
+    speed += 10
+    if speed >= 100:
+        speed = 100
+    L_PWM.ChangeDutyCycle(speed)
+    R_PWM.ChangeDutyCycle(speed)
+
+
+def speed_down():
+    global speed
+    print("speed--")
+    speed -= 10
+    if speed < 0:
+        speed = 0
+    L_PWM.ChangeDutyCycle(speed)
+    R_PWM.ChangeDutyCycle(speed)
 
 
 def handle_input():
@@ -128,6 +153,10 @@ def handle_input_asdf():
         move_forward()
     elif cmd == 's':
         stop() # move_backward()
+    elif cmd == '+':
+        speed_up()
+    elif cmd == '-':
+        speed_down()
     else:
         stop()
 

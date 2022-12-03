@@ -50,3 +50,9 @@ Client (VLC -> Open Network)
 ```bash
 tcp/mjpeg://192.168.4.76:8888
 ```
+
+#### Compile C++ code that uses RF24/SPI libraries
+
+```bash
+ g++ -L/usr/local/include/ scanner.cpp -lrf24
+```

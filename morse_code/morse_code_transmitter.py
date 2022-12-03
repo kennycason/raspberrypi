@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 PIN_IN = 3                     # IR or Button
-PIN_OUT = 2                    # LED or Buzzer
+PIN_OUT = 4                   # LED or Buzzer
 
 GPIO.setmode(GPIO.BCM)          # use BCM numbers
 GPIO.setup(PIN_OUT, GPIO.OUT)   # set the PIN_OUT OUTPUT mode
