@@ -1,5 +1,7 @@
 /*
 g++ -L/usr/local/include/ tank.cpp -o tank -lrf24 -lgpiod && ./tank
+
+https://circuitpython-nrf24l01.readthedocs.io/en/latest/
 */
 #include <iostream>
 #include <RF24/RF24.h>
