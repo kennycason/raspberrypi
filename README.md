@@ -45,10 +45,19 @@ Server (spider.local)
 ```bash
 libcamera-vid -t 0  -q 100 --framerate 3 -n --codec mjpeg --inline --listen -o tcp://192.168.4.76:8888 -v
 ```
+or
+```bash
+libcamera-vid -t 0  -q 75 --framerate 10 -n --codec mjpeg --inline --listen -o tcp://192.168.4.76:8888 -v 
+```
+
 
 Client (VLC -> Open Network)
 ```bash
 tcp/mjpeg://192.168.4.76:8888
+```
+Client using FFPlay
+```bash
+ffplay -probesize 32 -analyzeduration 0 -fflags nobuffer -fflags flush_packets -flags low_delay -framerate 30 -framedrop tcp://192.168.4.76:8888
 ```
 
 #### Compile C++ code that uses RF24/SPI libraries
