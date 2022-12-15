@@ -1,4 +1,6 @@
+# ChatGPT
 # Write python code to control dc motor with L298N Motor Driver Controller with reverse and forward
+
 
 # Import the necessary libraries
 import RPi.GPIO as GPIO

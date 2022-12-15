@@ -87,8 +87,7 @@ def move_forward():
 
 def reverse():
     print("reverse")
-    R_PWM = GPIO.PWM(R_PIN_ENABLE_A, 1000)
-    R_PWM.start(1000)
+    R_PWM.start(100)
     L_PWM.ChangeDutyCycle(0)
     R_PWM.ChangeDutyCycle(0)
     GPIO.output(L_PIN_IN1, GPIO.HIGH)
@@ -173,22 +172,31 @@ direction = BACKWARD
 
 def right_track_forward2():
     print("right track forward, direction: " + str(direction))
-    if direction == FORWARD:
-        GPIO.output(R_PIN_IN1, GPIO.HIGH)
-        GPIO.output(R_PIN_IN2, GPIO.LOW)
-    else:
-        GPIO.output(R_PIN_IN1, GPIO.LOW)
-        GPIO.output(R_PIN_IN2, GPIO.HIGH)
+    #R_PWM.start(0)
+    # R_PWM.ChangeDutyCycle(speed)
+    GPIO.output(R_PIN_IN1, GPIO.HIGH)
+    GPIO.output(R_PIN_IN2, GPIO.LOW)
+
+    # if direction == FORWARD:
+    #     GPIO.output(R_PIN_IN1, GPIO.HIGH)
+    #     GPIO.output(R_PIN_IN2, GPIO.LOW)
+    # else:
+    #     GPIO.output(R_PIN_IN1, GPIO.LOW)
+    #     GPIO.output(R_PIN_IN2, GPIO.HIGH)
 
 
 def right_track_backward2():
     print("right track backward, direction: " + str(direction))
-    if direction == FORWARD:
-        GPIO.output(R_PIN_IN1, GPIO.LOW)
-        GPIO.output(R_PIN_IN2, GPIO.HIGH)
-    else:
-        GPIO.output(R_PIN_IN1, GPIO.HIGH)
-        GPIO.output(R_PIN_IN2, GPIO.LOW)
+    # R_PWM.start(0)
+    # R_PWM.ChangeDutyCycle(speed)
+    GPIO.output(R_PIN_IN1, GPIO.HIGH)
+    GPIO.output(R_PIN_IN2, GPIO.HIGH)
+    # if direction == FORWARD:
+    #     GPIO.output(R_PIN_IN1, GPIO.LOW)
+    #     GPIO.output(R_PIN_IN2, GPIO.HIGH)
+    # else:
+    #     GPIO.output(R_PIN_IN1, GPIO.HIGH)
+    #     GPIO.output(R_PIN_IN2, GPIO.LOW)
 
 
 def left_track_forward2():

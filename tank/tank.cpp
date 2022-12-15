@@ -68,6 +68,42 @@ public:
     static const uint8_t requestTwistBody = 118;         // [order] [64 + xMove] [64 + yMove] [64 + zMove] [64 + xRotate] [64 + yRotate] [64 + zRotate]
 };
 
+struct Track {
+    int pinEnable;
+    int pinIn1;
+    int pinIn2;
+    int direction;
+    int speed;
+    struct gpiod_line *gpioLine;
+};
+
+int initTrack(Track &track, struct gpiod_chip *chip) {
+    track.gpioLine = gpiod_chip_get_line(chip, track.pinEnable);
+    if (!track.gpioLine) {
+        cout << "Get line [" << track.pinEnable << "] failed (" << track.gpioLine << ")" << endl;
+        gpiod_chip_close(chip);
+        return 1;
+    }
+    int ltLineOutputRequestReturn = gpiod_line_request_output(track.gpioLine, CONSUMER, 0);
+	if (ltLineOutputRequestReturn < 0) {
+		cout << "Request line as output failed" << endl;
+		gpiod_chip_close(chip);
+		return 1;
+	}
+	track.direction = 0;
+    track.speed = 100;
+	return 0;
+}
+
+int moveForward(Track &track, struct gpiod_chip *chip) {
+    int lineOutputRequestReturn = gpiod_line_set_value(track.gpioLine, 0);
+    if (lineOutputRequestReturn < 0) {
+        cout << "Set rtLine output failed" << endl;
+        gpiod_chip_close(chip);
+        return 1;
+    }
+    return 0;
+}
 
 
 // RF24
@@ -80,6 +116,7 @@ uint8_t rf24Address[6] = { 'F', 'N', 'K', '2', '9' };
 const char* chipname = "gpiochip0";
 struct gpiod_chip *chip;
 struct gpiod_line *ledLine;
+//struct Track rightTrack;
 struct gpiod_line *ltLine;
 struct gpiod_line *rtLine;
 
@@ -91,7 +128,6 @@ int main() {
     radio.setPALevel(RF24_PA_HIGH);
     radio.setDataRate(RF24_1MBPS);
     radio.enableDynamicPayloads();
-    //radio.openReadingPipe(0, 0x7878787878LL);
     radio.openReadingPipe(0, rf24Address);;
     radio.printDetails();
     radio.startListening();
@@ -110,13 +146,19 @@ int main() {
         gpiod_chip_close(chip);
         return 1;
     }
+
+//    rightTrack.pinEnable = RT_PIN_ENABLE_A;
+//    rightTrack.pinIn1 = RT_PIN_IN1;
+//    rightTrack.pinIn2 = RT_PIN_IN2;
+//    initTrack(rightTrack, chip);
+
+
     int ledLineOutputRequestReturn = gpiod_line_request_output(ledLine, CONSUMER, 0);
 	if (ledLineOutputRequestReturn < 0) {
 		cout << "Request ledLine line as output failed" << endl;
 		gpiod_chip_close(chip);
 		return 1;
 	}
-
 
     ltLine = gpiod_chip_get_line(chip, LT_PIN_ENABLE_A);
     if (!ltLine) {
@@ -241,6 +283,8 @@ int main() {
                 }
 		    }
 		    else if (direction == 2) { // right
+//		        moveForward(rightTrack, chip);
+
                 int lineOutputRequestReturn = gpiod_line_set_value(ltLine, 1);
                 if (lineOutputRequestReturn < 0) {
                     cout << "Set ltLine output failed" << endl;
