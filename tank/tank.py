@@ -1,3 +1,4 @@
+# Primary Tank code
 import RPi.GPIO as GPIO
 import time
 
@@ -9,8 +10,6 @@ L_PIN_ENABLE_A = 16
 L_PIN_IN1 = 20
 L_PIN_IN2 = 26
 
-speed = 100
-
 GPIO.setmode(GPIO.BCM)  # use BCM numbers
 
 # Left Track
@@ -20,9 +19,8 @@ GPIO.setup(L_PIN_ENABLE_A, GPIO.OUT)
 
 GPIO.setup(L_PIN_IN1, GPIO.LOW)
 GPIO.setup(L_PIN_IN2, GPIO.LOW)
-L_PWM = GPIO.PWM(L_PIN_ENABLE_A, 1000)
+L_PWM = GPIO.PWM(L_PIN_ENABLE_A, 100)
 L_PWM.start(25)
-# L_PWM.ChangeDutyCycle(speed)
 
 # Right Track
 GPIO.setup(R_PIN_IN1, GPIO.OUT)
@@ -31,77 +29,94 @@ GPIO.setup(R_PIN_ENABLE_A, GPIO.OUT)
 
 GPIO.setup(R_PIN_IN1, GPIO.LOW)
 GPIO.setup(R_PIN_IN2, GPIO.LOW)
-R_PWM = GPIO.PWM(R_PIN_ENABLE_A, 1000)
+R_PWM = GPIO.PWM(R_PIN_ENABLE_A, 100)
 R_PWM.start(25)
-# R_PWM.ChangeDutyCycle(speed)
 
 speed = 100
-
-def turn_left():
-    print("turn left")
-    GPIO.output(L_PIN_IN1, GPIO.LOW)
-    GPIO.output(L_PIN_IN2, GPIO.LOW)
-    GPIO.output(R_PIN_IN1, GPIO.LOW)
-    GPIO.output(R_PIN_IN2, GPIO.HIGH)
-
-
-def turn_right():
-    print("turn right")
-    GPIO.output(L_PIN_IN1, GPIO.LOW)
-    GPIO.output(L_PIN_IN2, GPIO.HIGH)
-    GPIO.output(R_PIN_IN1, GPIO.LOW)
-    GPIO.output(R_PIN_IN2, GPIO.LOW)
+leftDirection = 1
+rightDirection = 1
 
 
 def left_track_forward():
     print("left track forward")
-    GPIO.output(L_PIN_IN1, GPIO.LOW)
-    GPIO.output(L_PIN_IN2, GPIO.HIGH)
+    GPIO.output(L_PIN_IN1, True)
+    GPIO.output(L_PIN_IN2, False)
+    L_PWM.ChangeDutyCycle(100)
 
 
-def left_track_backward():
-    print("left track backward")
-    GPIO.output(L_PIN_IN1, GPIO.LOW)
-    GPIO.output(L_PIN_IN2, GPIO.HIGH)
+def left_track_reverse():
+    print("left track reverse")
+    GPIO.output(L_PIN_IN1, False)
+    GPIO.output(L_PIN_IN2, True)
+    L_PWM.ChangeDutyCycle(25)
+
+
+def left_track_stop():
+    print("left track stop")
+    GPIO.output(L_PIN_IN1, False)
+    GPIO.output(L_PIN_IN2, False)
+    L_PWM.ChangeDutyCycle(0)
 
 
 def right_track_forward():
     print("right track forward")
-    GPIO.output(R_PIN_IN1, GPIO.LOW)
-    GPIO.output(R_PIN_IN2, GPIO.HIGH)
+    GPIO.output(R_PIN_IN1, True)
+    GPIO.output(R_PIN_IN2, False)
+    R_PWM.ChangeDutyCycle(100)
 
 
-def right_track_backward():
-    print("right track backward")
-    GPIO.output(R_PIN_IN1, GPIO.HIGH)
-    GPIO.output(R_PIN_IN2, GPIO.LOW)
+def right_track_reverse():
+    print("right track reverse")
+    GPIO.output(R_PIN_IN1, False)
+    GPIO.output(R_PIN_IN2, True)
+    R_PWM.ChangeDutyCycle(25)
 
 
-def move_forward():
+def right_track_stop():
+    print("right track stop")
+    GPIO.output(R_PIN_IN1, False)
+    GPIO.output(R_PIN_IN2, False)
+    R_PWM.ChangeDutyCycle(0)
+
+
+def forward():
     print("forward")
-    GPIO.output(L_PIN_IN1, GPIO.LOW)
-    GPIO.output(L_PIN_IN2, GPIO.HIGH)
-    GPIO.output(R_PIN_IN1, GPIO.LOW)
-    GPIO.output(R_PIN_IN2, GPIO.HIGH)
+    left_track_forward()
+    right_track_forward()
 
 
 def reverse():
     print("reverse")
-    R_PWM.start(100)
-    L_PWM.ChangeDutyCycle(0)
-    R_PWM.ChangeDutyCycle(0)
-    GPIO.output(L_PIN_IN1, GPIO.HIGH)
-    GPIO.output(L_PIN_IN2, GPIO.LOW)
-    GPIO.output(R_PIN_IN1, GPIO.HIGH)
-    GPIO.output(R_PIN_IN2, GPIO.LOW)
+    left_track_reverse()
+    right_track_reverse()
 
 
 def stop():
     print("stop")
-    GPIO.output(L_PIN_IN1, GPIO.LOW)
-    GPIO.output(L_PIN_IN2, GPIO.LOW)
-    GPIO.output(R_PIN_IN1, GPIO.LOW)
-    GPIO.output(R_PIN_IN2, GPIO.LOW)
+    left_track_stop()
+    right_track_stop()
+
+def turn_left():
+    print("turn left")
+    left_track_stop()
+    right_track_forward()
+
+def turn_right():
+    print("turn right")
+    right_track_stop()
+    left_track_forward()
+
+
+def rotate_clockwise():
+    print("rotate clockwise")
+    right_track_reverse()
+    left_track_forward()
+
+
+def rotate_counterclockwise():
+    print("rotate counterclockwise")
+    right_track_forward()
+    left_track_reverse()
 
 
 def speed_up():
@@ -110,8 +125,8 @@ def speed_up():
     speed += 10
     if speed >= 100:
         speed = 100
-    L_PWM.ChangeDutyCycle(speed)
-    R_PWM.ChangeDutyCycle(speed)
+    # L_PWM.ChangeDutyCycle(speed)
+    # R_PWM.ChangeDutyCycle(speed)
 
 
 def speed_down():
@@ -120,178 +135,53 @@ def speed_down():
     speed -= 10
     if speed < 0:
         speed = 0
-    L_PWM.ChangeDutyCycle(speed)
-    R_PWM.ChangeDutyCycle(speed)
+    # L_PWM.ChangeDutyCycle(speed)
+    # R_PWM.ChangeDutyCycle(speed)
 
 
+# ↖  ↑  ↗   1 speed--
+#   QWE     2 speed++
+# ← ASD →   H clockwise
+#   ZXC     J counterclockwise
+# ↙  ↓  ↘　
 def handle_input():
     cmd = input()
-    if cmd == 'rf':
-        right_track_forward()
-    elif cmd == 'rb':
-        right_track_backward()
-    elif cmd == 'lf':
+    if cmd == 'q':
         left_track_forward()
-    elif cmd == 'lb':
-        left_track_backward()
-    elif cmd == 'f':
-        move_forward()
-    elif cmd == 'b':
-        stop()
-    elif cmd == 'l':
+    elif cmd == 'w':
+        forward()
+    elif cmd == 'e':
+        right_track_forward()
+
+    elif cmd == 'a':
         turn_left()
-    elif cmd == 'r':
-        turn_right()
     elif cmd == 's':
         stop()
-
-
-def handle_input_wasd():
-    cmd = input()
-    if cmd == 'a':
-        turn_left()
     elif cmd == 'd':
         turn_right()
-    elif cmd == 'w':
-        move_forward()
-    elif cmd == 's':
-        stop() # move_backward()
+
+    elif cmd == 'z':
+        left_track_reverse()
+    elif cmd == 'x':
+        reverse()
+    elif cmd == 'c':
+        right_track_reverse()
+
+    if cmd == 'h':
+        rotate_clockwise()
+    elif cmd == 'j':
+        rotate_counterclockwise()
+
     elif cmd == '1':
         speed_up()
     elif cmd == '2':
         speed_down()
-    elif cmd == '3':
-        reverse()
-    else:
-        stop()
-
-FORWARD = 1
-BACKWARD = 2
-direction = BACKWARD
 
 
-def right_track_forward2():
-    print("right track forward, direction: " + str(direction))
-    #R_PWM.start(0)
-    # R_PWM.ChangeDutyCycle(speed)
-    GPIO.output(R_PIN_IN1, GPIO.HIGH)
-    GPIO.output(R_PIN_IN2, GPIO.LOW)
-
-    # if direction == FORWARD:
-    #     GPIO.output(R_PIN_IN1, GPIO.HIGH)
-    #     GPIO.output(R_PIN_IN2, GPIO.LOW)
-    # else:
-    #     GPIO.output(R_PIN_IN1, GPIO.LOW)
-    #     GPIO.output(R_PIN_IN2, GPIO.HIGH)
-
-
-def right_track_backward2():
-    print("right track backward, direction: " + str(direction))
-    # R_PWM.start(0)
-    # R_PWM.ChangeDutyCycle(speed)
-    GPIO.output(R_PIN_IN1, GPIO.HIGH)
-    GPIO.output(R_PIN_IN2, GPIO.HIGH)
-    # if direction == FORWARD:
-    #     GPIO.output(R_PIN_IN1, GPIO.LOW)
-    #     GPIO.output(R_PIN_IN2, GPIO.HIGH)
-    # else:
-    #     GPIO.output(R_PIN_IN1, GPIO.HIGH)
-    #     GPIO.output(R_PIN_IN2, GPIO.LOW)
-
-
-def left_track_forward2():
-    print("left track forward, direction: " + str(direction))
-    if direction == FORWARD:
-        GPIO.output(L_PIN_IN1, GPIO.HIGH)
-        GPIO.output(L_PIN_IN2, GPIO.LOW)
-    else:
-        GPIO.output(L_PIN_IN1, GPIO.LOW)
-        GPIO.output(L_PIN_IN2, GPIO.HIGH)
-
-
-def left_track_backward2():
-    print("left track backward, direction: " + str(direction))
-    if direction == FORWARD:
-        GPIO.output(L_PIN_IN1, GPIO.LOW)
-        GPIO.output(L_PIN_IN2, GPIO.HIGH)
-    else:
-        GPIO.output(L_PIN_IN1, GPIO.HIGH)
-        GPIO.output(L_PIN_IN2, GPIO.LOW)
-
-
-def forward2():
-    left_track_forward2()
-    right_track_forward2()
-
-
-def backward2():
-    left_track_backward2()
-    right_track_backward2()
-
-
-def reverse_direction():
-    global direction
-    print("reverse")
-    if direction == FORWARD:
-        direction = BACKWARD
-    else:
-        direction = FORWARD
-
-
-def change_speed(speed: int):
-    if direction == FORWARD:
-        L_PWM.ChangeDutyCycle(speed)
-        R_PWM.ChangeDutyCycle(speed)
-    else:
-        L_PWM.ChangeDutyCycle(speed)
-        R_PWM.ChangeDutyCycle(speed)
-
-
-def stop2():
-    print("stop")
-    GPIO.output(L_PIN_IN1, GPIO.LOW)
-    GPIO.output(L_PIN_IN2, GPIO.LOW)
-    GPIO.output(R_PIN_IN1, GPIO.LOW)
-    GPIO.output(R_PIN_IN2, GPIO.LOW)
-    change_speed(0)
-
-
-def handle_input_v2():
-    cmd = input()
-    if cmd == 'rf':
-        right_track_forward2()
-    elif cmd == 'rb':
-        right_track_backward2()
-    elif cmd == 'lf':
-        left_track_forward2()
-    elif cmd == 'lb':
-        left_track_backward2()
-    elif cmd == 'f':
-        forward2()
-    elif cmd == 'b':
-        backward2()
-    elif cmd == 'r':
-        reverse_direction()
-    elif cmd == 's':
-        stop()
-    elif cmd == '1':
-        change_speed(25)
-    elif cmd == '2':
-        change_speed(50)
-    elif cmd == '3':
-        change_speed(75)
-    elif cmd == '4':
-        change_speed(100)
-    else:
-        stop2()
-
-
-stop2()
+stop()
 try:
     while True:
-        # handle_input()
-        # handle_input_wasd()
-        handle_input_v2()
+        handle_input()
         time.sleep(0.02)
 finally:
     GPIO.cleanup()

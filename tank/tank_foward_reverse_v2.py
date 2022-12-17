@@ -43,20 +43,24 @@ while (1):
         if (temp1 == 1):
             GPIO.output(rin1, GPIO.HIGH)
             GPIO.output(rin2, GPIO.LOW)
-
-            GPIO.output(lin1, GPIO.LOW)
-            GPIO.output(lin2, GPIO.HIGH)
             print("forward")
             x = 'z'
         else:
             GPIO.output(rin1, GPIO.LOW)
             GPIO.output(rin2, GPIO.HIGH)
-
-            GPIO.output(lin1, GPIO.HIGH)
-            GPIO.output(lin2, GPIO.LOW)
             print("backward")
             x = 'z'
 
+        if (temp1 == 0):
+            GPIO.output(lin1, GPIO.HIGH)
+            GPIO.output(lin2, GPIO.LOW)
+            print("forward")
+            x = 'z'
+        else:
+            GPIO.output(lin1, GPIO.LOW)
+            GPIO.output(lin2, GPIO.HIGH)
+            print("backward")
+            x = 'z'
 
     elif x == 's':
         print("stop")
@@ -70,9 +74,8 @@ while (1):
         print("forward")
         GPIO.output(rin1, GPIO.HIGH)
         GPIO.output(rin2, GPIO.LOW)
-        GPIO.output(lin1, GPIO.LOW)
-        GPIO.output(lin2, GPIO.HIGH)
-        temp1 = 1
+        GPIO.output(rin1, GPIO.LOW)
+        GPIO.output(rin2, GPIO.HIGH)
         x = 'z'
 
     elif x == 'b':

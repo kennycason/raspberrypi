@@ -1,6 +1,6 @@
 # ChatGPT
 # Write python code to control dc motor with L298N Motor Driver Controller with reverse and forward
-
+# I made updates to fix code, but it was 95% there.
 
 # Import the necessary libraries
 import RPi.GPIO as GPIO
@@ -34,11 +34,12 @@ pwmA = GPIO.PWM(ENA, 100)
 pwmB = GPIO.PWM(ENB, 100)
 
 # Start the PWM instances
-pwmA.start(0)
-pwmB.start(0)
+pwmA.start(25)
+pwmB.start(25)
 
 # Function to move the motor in the forward direction
 def forward():
+    print("forward")
     # Set the pins for the L298N Motor Driver Controller
     GPIO.output(IN1, True)
     GPIO.output(IN2, False)
@@ -51,6 +52,7 @@ def forward():
 
 # Function to move the motor in the reverse direction
 def reverse():
+    print("reverse")
     # Set the pins for the L298N Motor Driver Controller
     GPIO.output(IN1, False)
     GPIO.output(IN2, True)
@@ -58,23 +60,23 @@ def reverse():
     GPIO.output(IN3, False)
     GPIO.output(IN4, True)
     # Set the speed of the motor
-    pwmA.ChangeDutyCycle(100)
-    pwmB.ChangeDutyCycle(100)
+    pwmA.ChangeDutyCycle(25)
+    pwmB.ChangeDutyCycle(25)
 
 
 # Continuously move the motor in the forward direction for 5 seconds
 while True:
     forward()
-    time.sleep(3)
+    time.sleep(1)
     # Stop the motor
-    pwmA.ChangeDutyCycle(0)
-    pwmB.ChangeDutyCycle(0)
+    # pwmA.ChangeDutyCycle(0)
+    # pwmB.ChangeDutyCycle(0)
     # Move the motor in the reverse direction for 5 seconds
     reverse()
-    time.sleep(3)
+    time.sleep(1)
     # Stop the motor
-    pwmA.ChangeDutyCycle(0)
-    pwmB.ChangeDutyCycle(0)
+    # pwmA.ChangeDutyCycle(0)
+    # pwmB.ChangeDutyCycle(0)
 
 # This code continuously moves the motor in the forward direction for 5 seconds, then stops the motor, moves the motor
 # in the reverse direction for 5 seconds, and then stops the motor again. You can adjust the speed of the motor and the
