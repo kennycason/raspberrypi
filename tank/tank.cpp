@@ -281,6 +281,18 @@ int main() {
                     gpiod_chip_close(chip);
                     return 1;
                 }
+                lineOutputRequestReturn = gpiod_line_request_pwm_cycle(ltLine, CONSUMER, 1000, 0);
+                if (lineOutputRequestReturn < 0) {
+                    cout << "Set ltLine pwm cycles failed" << endl;
+                    gpiod_chip_close(chip);
+                    return 1;
+                }
+                lineOutputRequestReturn = gpiod_line_request_pwm_cycle(rtLine, CONSUMER, 1000, 0);
+                if (lineOutputRequestReturn < 0) {
+                    cout << "Set rtLine pwm cycles failed" << endl;
+                    gpiod_chip_close(chip);
+                    return 1;
+                }
 		    }
 		    else if (direction == 2) { // right
 //		        moveForward(rightTrack, chip);
@@ -308,6 +320,18 @@ int main() {
                 lineOutputRequestReturn = gpiod_line_set_value(rtLine, 0);
                 if (lineOutputRequestReturn < 0) {
                     cout << "Set rtLine output failed" << endl;
+                    gpiod_chip_close(chip);
+                    return 1;
+                }
+                lineOutputRequestReturn = gpiod_line_request_pwm_cycle(ltLine, CONSUMER, 0, 0);
+                if (lineOutputRequestReturn < 0) {
+                    cout << "Set ltLine pwm cycles failed" << endl;
+                    gpiod_chip_close(chip);
+                    return 1;
+                }
+                lineOutputRequestReturn = gpiod_line_request_pwm_cycle(rtLine, CONSUMER, 0, 0);
+                if (lineOutputRequestReturn < 0) {
+                    cout << "Set rtLine pwm cycles failed" << endl;
                     gpiod_chip_close(chip);
                     return 1;
                 }
@@ -357,5 +381,55 @@ joystick left
 Transmission Start
 � 128 n 110 j 106 A 65 @ 64 � 129
 Pipe : 0 Size : 6 Set line output led 0
+
+*/
+
+
+/*
+#include <gpiod.h>
+#include <unistd.h>
+
+int main(void)
+{
+  // Initialize the library
+  struct gpiod_chip *chip;
+  int rv = gpiod_chip_open_lookup(&chip, "gpiochip0");
+  if (rv) {
+    // Handle error
+  }
+
+  // Request a line handle
+  struct gpiod_line *line;
+  line = gpiod_chip_get_line(chip, 4);  // Set line number here
+  rv = gpiod_line_request_output(line, "my_app", 0);
+  if (rv) {
+    // Handle error
+  }
+
+  // Set the PWM duty cycle
+  int on_time = 1000;  // Set on-time here, in microseconds
+  int off_time = 500;  // Set off-time here, in microseconds
+  int period = on_time + off_time;
+  int value = 0;
+  while (1) {
+    // Set the output value
+    rv = gpiod_line_set_value(line, value);
+    if (rv) {
+      // Handle error
+    }
+
+    // Sleep for the on or off time
+    usleep(value ? on_time : off_time);
+
+    // Toggle the value
+    value = !value;
+  }
+
+  // Release the line handle and close the chip
+  gpiod_line_release(line);
+  gpiod_chip_close(chip);
+
+  return 0;
+}
 
 */

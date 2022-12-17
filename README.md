@@ -65,3 +65,6 @@ ffplay -probesize 32 -analyzeduration 0 -fflags nobuffer -fflags flush_packets -
 ```bash
  g++ -L/usr/local/include/ scanner.cpp -lrf24
 ```
+
+Video Recordings:
+https://v.usetapes.com/oFj2Rk1B44

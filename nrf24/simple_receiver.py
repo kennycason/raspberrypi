@@ -1,8 +1,7 @@
-# import argparse
+import argparse
 from datetime import datetime
 import struct
 import sys
-# import time
 import traceback
 
 import pigpio
@@ -18,22 +17,22 @@ if __name__ == "__main__":
     print("Python NRF24 Simple Receiver Example.")
 
     # Parse command line argument.
-    # parser = argparse.ArgumentParser(prog="simple-receiver.py", description="Simple NRF24 Receiver Example.")
-    # parser.add_argument('-n', '--hostname', type=str, default='localhost',
-    #                     help="Hostname for the Raspberry running the pigpio daemon.")
-    # parser.add_argument('-p', '--port', type=int, default=8888, help="Port number of the pigpio daemon.")
-    # parser.add_argument('address', type=str, nargs='?', default='1SNSR',
-    #                     help="Address to listen to (3 to 5 ASCII characters)")
-    #
-    # args = parser.parse_args()
-    # hostname = args.hostname
-    # port = args.port
-    # address = args.address
-    #
-    # # Verify that address is between 3 and 5 characters.
-    # if not (2 < len(address) < 6):
-    #     print(f'Invalid address {address}. Addresses must be between 3 and 5 ASCII characters.')
-    #     sys.exit(1)
+    parser = argparse.ArgumentParser(prog="simple-receiver.py", description="Simple NRF24 Receiver Example.")
+    parser.add_argument('-n', '--hostname', type=str, default='localhost',
+                        help="Hostname for the Raspberry running the pigpio daemon.")
+    parser.add_argument('-p', '--port', type=int, default=8888, help="Port number of the pigpio daemon.")
+    parser.add_argument('-a', '--address', type=str, nargs='?', default='1SNSR',
+                        help="Address to listen to (3 to 5 ASCII characters)")
+
+    args = parser.parse_args()
+    hostname = args.hostname
+    port = args.port
+    address = args.address
+
+    # Verify that address is between 3 and 5 characters.
+    if not (2 < len(address) < 6):
+        print(f'Invalid address {address}. Addresses must be between 3 and 5 ASCII characters.')
+        sys.exit(1)
 
     # Connect to pigpiod
     print(f'Connecting to GPIO daemon on {hostname}:{port} ...')
@@ -44,7 +43,7 @@ if __name__ == "__main__":
 
     # Create NRF24 object.
     # PLEASE NOTE: PA level is set to MIN, because test sender/receivers are often close to each other, and then MIN works better.
-    nrf = NRF24(pi, ce=25, payload_size=RF24_PAYLOAD.DYNAMIC, channel=100, data_rate=RF24_DATA_RATE.RATE_250KBPS,
+    nrf = NRF24(pi, ce=22, payload_size=RF24_PAYLOAD.DYNAMIC, channel=125, data_rate=RF24_DATA_RATE.RATE_250KBPS,
                 pa_level=RF24_PA.MIN)
     # nrf.set_address_bytes(len(address))
 
