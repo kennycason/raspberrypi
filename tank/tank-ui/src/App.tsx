@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import logo from './tank.svg';
+import rotateCw from './rotate-cw.svg';
+import rotateCcw from './rotate-ccw.svg';
+import stop from './stop.svg';
 
 import {Joystick} from 'react-joystick-component';
 import styled from "styled-components";
@@ -9,6 +12,8 @@ import {tankForward} from "./service/tankForward";
 import {tankReverse} from "./service/tankReverse";
 import {tankRight} from "./service/tankRight";
 import {tankLeft} from "./service/tankLeft";
+import {tankCounterClockwise} from "./service/tankCounterClockwise";
+import {tankClockwise} from "./service/tankClockwise";
 
 enum Direction {
     POSITIVE = 'POSITIVE',
@@ -20,6 +25,7 @@ const THRESHOLD = 0.3;
 
 function issueCommand(directions: [Direction, Direction]) {
     const [dx, dy] = directions;
+    console.log(`issue command, dx: ${dx}, dy: ${dy}`);
 
     if (dx == Direction.NEUTRAL && dy == Direction.NEUTRAL) { // stop
         tankStop();
@@ -30,8 +36,7 @@ function issueCommand(directions: [Direction, Direction]) {
         } else if (dy == Direction.NEGATIVE) {
             tankReverse();
         }
-    }
-    else if (dy == Direction.NEUTRAL && dx != Direction.NEUTRAL) { // left/right only
+    } else if (dy == Direction.NEUTRAL && dx != Direction.NEUTRAL) { // left/right only
         if (dx == Direction.POSITIVE) {
             tankRight();
         } else if (dx == Direction.NEGATIVE) {
@@ -44,11 +49,11 @@ export const App = () => {
     const [directions, setDirections] = useState<[Direction, Direction]>([Direction.NEUTRAL, Direction.NEUTRAL]);
 
     const handleEvent = (event: IJoystickUpdateEvent) => {
-        const { x, y } = event;
+        const {x, y} = event;
         const dx = getDirection(x!);
         const dy = getDirection(y!);
-        console.log(`x: ${x}, y: ${y}`);
-        console.log(`dx: ${dx}, dy: ${dy}`);
+        //console.log(`x: ${x}, y: ${y}`);
+        //console.log(`dx: ${dx}, dy: ${dy}`);
 
         if (dx != directions[0] || dy != directions[1]) {
             issueCommand([dx, dy])
@@ -68,9 +73,19 @@ export const App = () => {
 
     const handleMove = (event: IJoystickUpdateEvent) => handleEvent(event);
 
-    const handleStop = (event: IJoystickUpdateEvent) => {
+    const handleStop = () => {
         setDirections([Direction.NEUTRAL, Direction.NEUTRAL]);
         tankStop();
+    }
+
+    const handleTankClockwise = async () => {
+      await tankStop();
+      await tankClockwise();
+    }
+
+    const handleTankCounterClockwise = async () => {
+        await tankStop();
+        await tankCounterClockwise();
     }
 
     return (
@@ -81,15 +96,28 @@ export const App = () => {
                     Tank v1.0
                 </p>
             </header>
-            <div className="joystick-container">
-                <Joystick
-                    size={256}
-                    sticky={true}
-                    baseColor="#282c34"
-                    stickColor="black"
-                    move={handleMove}
-                    stop={handleStop}
-                />
+            <div className="controller">
+                <div className="joystick-container">
+                    <Joystick
+                        size={256}
+                        sticky={true}
+                        baseColor="#282c34"
+                        stickColor="black"
+                        move={handleMove}
+                        stop={handleStop}
+                    />
+                </div>
+                <div className="buttons">
+                    <button className="button" onClick={handleTankClockwise}>
+                        <img src={rotateCw} className="rotate-cw" alt="Clockwise"/>
+                    </button>
+                    <button className="button" onClick={handleStop}>
+                        <img src={stop} className="stop" alt="Stop"/>
+                    </button>
+                    <button className="button" onClick={handleTankCounterClockwise}>
+                        <img src={rotateCcw} className="rotate-ccw" alt="Counter-Clockwise"/>
+                    </button>
+                </div>
             </div>
         </StyledApp>
     );
@@ -133,10 +161,32 @@ const StyledApp = styled.div`
         }
       }
     }
-    
-    
-    .joystick-container {
-      padding: 20px;
+
+    .controller {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      
+      .joystick-container {
+        padding: 20px;
+        margin-right: 32px;
+      }
+      
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+                
+        .button {
+          height: 64px;
+          width: 64px;
+          margin: 5px;
+        }
+      }
+      
     }
+    
   }
 `;
