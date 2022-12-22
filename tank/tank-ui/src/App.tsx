@@ -100,7 +100,8 @@ export const App = () => {
                 <div className="joystick-container">
                     <Joystick
                         size={256}
-                        sticky={true}
+                        sticky={false}
+                        throttle={250}
                         baseColor="#282c34"
                         stickColor="black"
                         move={handleMove}
