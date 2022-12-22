@@ -2,13 +2,14 @@
 # export FLASK_APP=tank_server
 # flask run -h 192.168.4.76 -p 8080
 from flask import Flask
+from flask_cors import CORS
 from .tank import Tank
 
 tank = Tank()
 tank.stop()
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/tank/forward')
 def tank_forward():

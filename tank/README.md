@@ -42,7 +42,11 @@ GET /tank/clockwise
 GET /tank/counter-clockwise
 ```
 
-
+Install Dependencies (TODO)
+```shell
+pip install flask
+pip install flask_cors
+```
 
 ## Sample Output
 
