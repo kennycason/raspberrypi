@@ -101,7 +101,7 @@ export const App = () => {
                     <Joystick
                         size={256}
                         sticky={false}
-                        throttle={250}
+                        throttle={100}
                         baseColor="#282c34"
                         stickColor="black"
                         move={handleMove}
