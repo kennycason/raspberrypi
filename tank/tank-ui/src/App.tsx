@@ -1,25 +1,23 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from './tank.svg';
 import rotateCw from './rotate-cw.svg';
 import rotateCcw from './rotate-ccw.svg';
 import stop from './stop.svg';
 
 import {Joystick} from 'react-joystick-component';
-import styled from "styled-components";
 import {IJoystickUpdateEvent} from "react-joystick-component/build/lib/Joystick";
-import {tankStop} from "./service/tankStop";
-import {tankForward} from "./service/tankForward";
-import {tankReverse} from "./service/tankReverse";
-import {tankRight} from "./service/tankRight";
-import {tankLeft} from "./service/tankLeft";
-import {tankCounterClockwise} from "./service/tankCounterClockwise";
-import {tankClockwise} from "./service/tankClockwise";
-
-enum Direction {
-    POSITIVE = 'POSITIVE',
-    NEUTRAL = 'NEUTRAL',
-    NEGATIVE = 'NEGATIVE'
-}
+import {moveTankStop} from "./service/moveTankStop";
+import {moveTankForward} from "./service/moveTankForward";
+import {moveTankReverse} from "./service/moveTankReverse";
+import {moveTankRight} from "./service/moveTankRight";
+import {moveTankLeft} from "./service/moveTankLeft";
+import {moveTankCounterClockwise} from "./service/moveTankCounterClockwise";
+import {moveTankClockwise} from "./service/moveTankClockwise";
+import {getTankStatus} from "./service/getTankStatus";
+import {Direction} from "./Direction";
+import {TankStatus} from "./TankStatus";
+import styled from "@emotion/styled";
+import {Box} from "@mui/material";
 
 const THRESHOLD = 0.3;
 
@@ -28,25 +26,32 @@ function issueCommand(directions: [Direction, Direction]) {
     console.log(`issue command, dx: ${dx}, dy: ${dy}`);
 
     if (dx == Direction.NEUTRAL && dy == Direction.NEUTRAL) { // stop
-        tankStop();
+        moveTankStop();
     }
     if (dx == Direction.NEUTRAL && dy != Direction.NEUTRAL) { // forward/reverse only
         if (dy == Direction.POSITIVE) {
-            tankForward();
+            moveTankForward();
         } else if (dy == Direction.NEGATIVE) {
-            tankReverse();
+            moveTankReverse();
         }
     } else if (dy == Direction.NEUTRAL && dx != Direction.NEUTRAL) { // left/right only
         if (dx == Direction.POSITIVE) {
-            tankRight();
+            moveTankRight();
         } else if (dx == Direction.NEGATIVE) {
-            tankLeft();
+            moveTankLeft();
         }
     }
 }
 
 export const App = () => {
     const [directions, setDirections] = useState<[Direction, Direction]>([Direction.NEUTRAL, Direction.NEUTRAL]);
+    const [tankStatus, setTankStatus] = useState<TankStatus>({} as TankStatus);
+
+    useEffect(() => {
+        getTankStatus().then((response) => {
+            setTankStatus(response.data);
+        });
+    }, [directions]);
 
     const handleEvent = (event: IJoystickUpdateEvent) => {
         const {x, y} = event;
@@ -75,17 +80,17 @@ export const App = () => {
 
     const handleStop = () => {
         setDirections([Direction.NEUTRAL, Direction.NEUTRAL]);
-        tankStop();
+        moveTankStop();
     }
 
     const handleTankClockwise = async () => {
-      await tankStop();
-      await tankClockwise();
+        await moveTankStop();
+        await moveTankClockwise();
     }
 
     const handleTankCounterClockwise = async () => {
-        await tankStop();
-        await tankCounterClockwise();
+        await moveTankStop();
+        await moveTankCounterClockwise();
     }
 
     return (
@@ -96,30 +101,43 @@ export const App = () => {
                     Tank v1.0
                 </p>
             </header>
-            <div className="controller">
-                <div className="joystick-container">
-                    <Joystick
-                        size={256}
-                        sticky={false}
-                        throttle={100}
-                        baseColor="#282c34"
-                        stickColor="black"
-                        move={handleMove}
-                        stop={handleStop}
-                    />
+            <Box display="flex" flexDirection="row">
+                <Box flexDirection="column">
+                    <Box flexDirection="row">
+                        <div>Left Speed</div>
+                        {/*<div>{tankStatus?.leftTank?.speed || 'N/A'}</div>*/}
+                    </Box>
+                    <Box flexDirection="row">
+                        <div>Right Speed</div>
+                        {/*<div>{tankStatus?.rightTank.speed}</div>*/}
+                    </Box>
+                </Box>
+
+                <div className="controller">
+                    <div className="joystick-container">
+                        <Joystick
+                            size={256}
+                            sticky={false}
+                            throttle={100}
+                            baseColor="#282c34"
+                            stickColor="black"
+                            move={handleMove}
+                            stop={handleStop}
+                        />
+                    </div>
+                    <div className="buttons">
+                        <button className="button" onClick={handleTankClockwise}>
+                            <img src={rotateCw} className="rotate-cw" alt="Clockwise"/>
+                        </button>
+                        <button className="button" onClick={handleStop}>
+                            <img src={stop} className="stop" alt="Stop"/>
+                        </button>
+                        <button className="button" onClick={handleTankCounterClockwise}>
+                            <img src={rotateCcw} className="rotate-ccw" alt="Counter-Clockwise"/>
+                        </button>
+                    </div>
                 </div>
-                <div className="buttons">
-                    <button className="button" onClick={handleTankClockwise}>
-                        <img src={rotateCw} className="rotate-cw" alt="Clockwise"/>
-                    </button>
-                    <button className="button" onClick={handleStop}>
-                        <img src={stop} className="stop" alt="Stop"/>
-                    </button>
-                    <button className="button" onClick={handleTankCounterClockwise}>
-                        <img src={rotateCcw} className="rotate-ccw" alt="Counter-Clockwise"/>
-                    </button>
-                </div>
-            </div>
+            </Box>
         </StyledApp>
     );
 }
@@ -168,26 +186,26 @@ const StyledApp = styled.div`
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      
+
       .joystick-container {
         padding: 20px;
         margin-right: 32px;
       }
-      
+
       .buttons {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-                
+
         .button {
           height: 64px;
           width: 64px;
           margin: 5px;
         }
       }
-      
+
     }
-    
+
   }
 `;

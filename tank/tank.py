@@ -45,7 +45,7 @@ class Track:
         self.pwm.start(self.pwmStart)
 
     def forward(self):
-        print("left track forward")
+        print("track forward")
         if not self.is_inverted:
             GPIO.output(self.pin_in1, True)
             GPIO.output(self.pin_in2, False)
@@ -56,7 +56,7 @@ class Track:
             self.pwm.ChangeDutyCycle(25)
 
     def reverse(self):
-        print("left track reverse")
+        print("track reverse")
         if not self.is_inverted:
             GPIO.output(self.pin_in1, False)
             GPIO.output(self.pin_in2, True)
@@ -67,16 +67,41 @@ class Track:
             self.pwm.ChangeDutyCycle(100)
 
     def stop(self):
-        print("left track stop")
+        print("track stop")
         GPIO.output(self.pin_in1, False)
         GPIO.output(self.pin_in2, False)
         self.pwm.ChangeDutyCycle(0)
 
+    def speed_up(self):
+        print("speed++")
+        self.speed += 10
+        if self.speed >= 100:
+            self.speed = 100
+        self.pwm.ChangeDutyCycle(self.speed)
+
+    def speed_down(self):
+        print("speed--")
+        self.speed -= 10
+        if self.speed < 0:
+            self.speed = 0
+            self.stop()
+        else:
+            self.pwm.ChangeDutyCycle(self.speed)
 
 class Tank:
     def __init__(self):
-        self.left_track = Track(L_PIN_ENABLE_A, L_PIN_IN1, L_PIN_IN2, True)
-        self.right_track = Track(R_PIN_ENABLE_A, R_PIN_IN1, R_PIN_IN2, True)
+        self.left_track = Track(L_PIN_ENABLE_A, L_PIN_IN1, L_PIN_IN2, is_inverted=True)
+        self.right_track = Track(R_PIN_ENABLE_A, R_PIN_IN1, R_PIN_IN2, is_inverted=True)
+
+    def status(self):
+        return {
+            'leftTrack': {
+                'speed': self.left_track.speed
+            },
+            'rightTrack': {
+                'speed': self.right_track.speed
+            }
+        }
 
     def cleanup(self):
         GPIO.cleanup()
@@ -136,19 +161,13 @@ class Tank:
 
     def speed_up(self):
         print("speed++")
-        # self.speed += 10
-        # if self.speed >= 100:
-        #     self.speed = 100
-        # L_PWM.ChangeDutyCycle(speed)
-        # R_PWM.ChangeDutyCycle(speed)
+        self.left_track.speed_up()
+        self.right_track.speed_up()
 
     def speed_down(self):
         print("speed--")
-        # self.speed -= 10
-        # if self.speed < 0:
-        #     self.speed = 0
-        # L_PWM.ChangeDutyCycle(speed)
-        # R_PWM.ChangeDutyCycle(speed)
+        self.left_track.speed_down()
+        self.right_track.speed_down()
 
     def init_nrf24(self):
         pass
