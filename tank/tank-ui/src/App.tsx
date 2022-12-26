@@ -17,7 +17,7 @@ import {getTankStatus} from "./service/getTankStatus";
 import {Direction} from "./Direction";
 import {TankStatus} from "./TankStatus";
 import styled from "@emotion/styled";
-import {Box} from "@mui/material";
+import {Box, Slider, Stack} from "@mui/material";
 
 const THRESHOLD = 0.3;
 
@@ -102,18 +102,26 @@ export const App = () => {
                 </p>
             </header>
             <Box display="flex" flexDirection="row">
-                <Box flexDirection="column">
-                    <Box flexDirection="row">
-                        <div>Left Speed</div>
-                        {/*<div>{tankStatus?.leftTank?.speed || 'N/A'}</div>*/}
-                    </Box>
-                    <Box flexDirection="row">
-                        <div>Right Speed</div>
-                        {/*<div>{tankStatus?.rightTank.speed}</div>*/}
-                    </Box>
-                </Box>
+                {/*<Box flexDirection="column">*/}
+                {/*    <Box flexDirection="row">*/}
+                {/*        <div>Left Speed</div>*/}
+                {/*        <>{tankStatus?.leftTank?.speed || 'N/A'}</>*/}
+                {/*    </Box>*/}
+                {/*    <Box flexDirection="row">*/}
+                {/*        <div>Right Speed</div>*/}
+                {/*        /!*<div>{tankStatus?.rightTank.speed}</div>*!/*/}
+                {/*    </Box>*/}
+                {/*</Box>*/}
 
                 <div className="controller">
+                    <Stack sx={{ height: 256, marginX: 8 }} spacing={1} direction="row">
+                        <Slider
+                            aria-label="Speed"
+                            orientation="vertical"
+                            valueLabelDisplay="auto"
+                            defaultValue={50}
+                        />
+                    </Stack>
                     <div className="joystick-container">
                         <Joystick
                             size={256}

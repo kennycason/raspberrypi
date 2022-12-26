@@ -2,6 +2,7 @@
 import RPi.GPIO as GPIO
 from enum import Enum
 import time
+
 # import pigpio
 # from nrf24 import *
 
@@ -28,9 +29,9 @@ class Track:
         self.pin_enableA = pin_enableA
         self.pin_in1 = pin_in1
         self.pin_in2 = pin_in2
-        self.pwmMax = 100
-        self.pwmStart = 25
-        self.speed = 100  # not used
+        self.pwmMax: int = 100
+        self.pwmStart: int = 100
+        self.speed: int = 100  # not used
         self.direction = Direction.FORWARD
         self.is_inverted = is_inverted
 
@@ -46,47 +47,66 @@ class Track:
 
     def forward(self):
         print("track forward")
+        self.direction = Direction.FORWARD
         if not self.is_inverted:
             GPIO.output(self.pin_in1, True)
             GPIO.output(self.pin_in2, False)
-            self.pwm.ChangeDutyCycle(100)
+            self.set_speed(self.speed)
+            # self.pwm.ChangeDutyCycle(100)
         else:
             GPIO.output(self.pin_in1, False)
             GPIO.output(self.pin_in2, True)
-            self.pwm.ChangeDutyCycle(25)
+            self.set_speed(self.speed)
+            # self.pwm.ChangeDutyCycle(0)
 
     def reverse(self):
         print("track reverse")
+        self.direction = Direction.REVERSE
         if not self.is_inverted:
             GPIO.output(self.pin_in1, False)
             GPIO.output(self.pin_in2, True)
-            self.pwm.ChangeDutyCycle(25)
+            self.set_speed(self.speed)
+            # self.pwm.ChangeDutyCycle(0)
         else:
             GPIO.output(self.pin_in1, True)
             GPIO.output(self.pin_in2, False)
-            self.pwm.ChangeDutyCycle(100)
+            self.set_speed(self.speed)
+            # self.pwm.ChangeDutyCycle(100)
 
     def stop(self):
         print("track stop")
         GPIO.output(self.pin_in1, False)
         GPIO.output(self.pin_in2, False)
+        # keep speed as-is, and change duty cycle so that resuming movement will use last speed.
         self.pwm.ChangeDutyCycle(0)
+
+    def set_speed(self, speed: int):
+        self.speed = speed
+        if self.speed >= 100:
+            self.speed = 100
+        elif self.speed < 0:
+            self.speed = 0
+
+        print("speed: " + str(self.speed))
+        if self.direction == Direction.FORWARD:
+            if not self.is_inverted:
+                self.pwm.ChangeDutyCycle(speed)
+            else:
+                self.pwm.ChangeDutyCycle(100 - speed)
+        elif self.direction == Direction.REVERSE:
+            if not self.is_inverted:
+                self.pwm.ChangeDutyCycle(100 - speed)
+            else:
+                self.pwm.ChangeDutyCycle(speed)
 
     def speed_up(self):
         print("speed++")
-        self.speed += 10
-        if self.speed >= 100:
-            self.speed = 100
-        self.pwm.ChangeDutyCycle(self.speed)
+        self.set_speed(self.speed + 10)
 
     def speed_down(self):
         print("speed--")
-        self.speed -= 10
-        if self.speed < 0:
-            self.speed = 0
-            self.stop()
-        else:
-            self.pwm.ChangeDutyCycle(self.speed)
+        self.set_speed(self.speed - 10)
+
 
 class Tank:
     def __init__(self):
