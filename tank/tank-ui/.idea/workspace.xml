@@ -6,6 +6,10 @@
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rotate-ccw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rotate-cw.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tank.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/tank.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tank.py" beforeDir="false" afterPath="$PROJECT_DIR$/../tank.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +18,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="2JGF3tAbnFTf8fnnDr3gsj2ceoU" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -28,6 +40,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/service" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -45,7 +58,7 @@
       <option name="presentableId" value="Default" />
       <updated>1671696316882</updated>
       <workItem from="1671696319165" duration="5000" />
-      <workItem from="1671733694954" duration="6593000" />
+      <workItem from="1671733694954" duration="10478000" />
     </task>
     <servers />
   </component>

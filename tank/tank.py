@@ -189,6 +189,22 @@ class Tank:
         self.left_track.speed_down()
         self.right_track.speed_down()
 
+    def right_track_speed_up(self):
+        print("right track speed++")
+        self.right_track.speed_up()
+
+    def right_track_speed_down(self):
+        print("right track speed--")
+        self.right_track.speed_down()
+
+    def left_track_speed_up(self):
+        print("left track speed++")
+        self.left_track.speed_up()
+
+    def left_track_speed_down(self):
+        print("left track speed--")
+        self.left_track.speed_down()
+
     def init_nrf24(self):
         pass
         # for NRF24
