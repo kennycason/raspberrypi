@@ -1,0 +1,311 @@
+{
+	"info": {
+		"_postman_id": "fee5080a-32dd-462d-8131-3dcfb057a396",
+		"name": "Robot Tank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "61197"
+	},
+	"item": [
+		{
+			"name": "/tank/status",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/status",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/forward",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/forward",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"forward"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/reverse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/reverse",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"reverse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/stop",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/stop",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"stop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/turn-left",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/turn-left",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"turn-left"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/turn-right",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/turn-right",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"turn-right"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/left-track-forward",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/left-track-forward",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"left-track-forward"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/left-track-reverse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/left-track-reverse",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"left-track-reverse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/right-track-forward",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/right-track-forward",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"right-track-forward"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/right-track-reverse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/right-track-reverse",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"right-track-reverse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/clockwise",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/clockwise",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"clockwise"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/counter-clockwise",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/counter-clockwise",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"counter-clockwise"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/speed-up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/speed-up",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"speed-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/speed-down",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/speed-down",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"speed-down"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/tank/speed/{speed}",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "spider.local:8080/tank/speed/{speed}",
+					"host": [
+						"spider",
+						"local"
+					],
+					"port": "8080",
+					"path": [
+						"tank",
+						"speed",
+						"{speed}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

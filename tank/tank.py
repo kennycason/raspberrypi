@@ -19,6 +19,7 @@ ADDRESS = "FNK29"
 
 
 class Direction(Enum):
+    STOP = 0
     FORWARD = 1
     REVERSE = 2
 
@@ -32,7 +33,7 @@ class Track:
         self.pwmMax: int = 100
         self.pwmStart: int = 100
         self.speed: int = 100  # not used
-        self.direction = Direction.FORWARD
+        self.direction = Direction.STOP
         self.is_inverted = is_inverted
 
         GPIO.setup(pin_in1, GPIO.OUT)
@@ -75,6 +76,7 @@ class Track:
 
     def stop(self):
         print("track stop")
+        self.direction = Direction.STOP
         GPIO.output(self.pin_in1, False)
         GPIO.output(self.pin_in2, False)
         # keep speed as-is, and change duty cycle so that resuming movement will use last speed.
@@ -88,16 +90,27 @@ class Track:
             self.speed = 0
 
         print("speed: " + str(self.speed))
+
+        # if motor is not running, only set the internal speed. speed will be passed to motor when tank moves.
+        if self.direction == Direction.STOP:
+            print("tank stopped, not changing motor speed")
+            return
+
+        # # in the case speed is 0, then just call our helper function to stop the track
+        # if self.speed == 0:
+        #     self.direction = Direction.STOP
+        #     self.stop()
+
         if self.direction == Direction.FORWARD:
             if not self.is_inverted:
-                self.pwm.ChangeDutyCycle(speed)
+                self.pwm.ChangeDutyCycle(self.speed)
             else:
-                self.pwm.ChangeDutyCycle(100 - speed)
+                self.pwm.ChangeDutyCycle(100 - self.speed)
         elif self.direction == Direction.REVERSE:
             if not self.is_inverted:
-                self.pwm.ChangeDutyCycle(100 - speed)
+                self.pwm.ChangeDutyCycle(100 - self.speed)
             else:
-                self.pwm.ChangeDutyCycle(speed)
+                self.pwm.ChangeDutyCycle(self.speed)
 
     def speed_up(self):
         print("speed++")
@@ -106,7 +119,6 @@ class Track:
     def speed_down(self):
         print("speed--")
         self.set_speed(self.speed - 10)
-
 
 class Tank:
     def __init__(self):
@@ -179,16 +191,6 @@ class Tank:
         self.left_track.reverse()
         self.right_track.forward()
 
-    def speed_up(self):
-        print("speed++")
-        self.left_track.speed_up()
-        self.right_track.speed_up()
-
-    def speed_down(self):
-        print("speed--")
-        self.left_track.speed_down()
-        self.right_track.speed_down()
-
     def right_track_speed_up(self):
         print("right track speed++")
         self.right_track.speed_up()
@@ -204,6 +206,24 @@ class Tank:
     def left_track_speed_down(self):
         print("left track speed--")
         self.left_track.speed_down()
+
+    def speed_up(self):
+        print("speed++")
+        self.left_track.speed_up()
+        self.right_track.speed_up()
+        return self.status()
+
+    def speed_down(self):
+        print("speed--")
+        self.left_track.speed_down()
+        self.right_track.speed_down()
+        return self.status()
+
+    def set_speed(self, speed: int):
+        print("set speed: " + str(speed))
+        self.left_track.set_speed(speed)
+        self.right_track.set_speed(speed)
+        return self.status()
 
     def init_nrf24(self):
         pass

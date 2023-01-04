@@ -20,7 +20,7 @@ import {getTankStatus} from "./service/getTankStatus";
 import {Direction} from "./Direction";
 import {TankStatus} from "./TankStatus";
 import styled from "@emotion/styled";
-import {Box, Slider, Stack} from "@mui/material";
+import {Box, Checkbox, FormControlLabel, Slider, Stack} from "@mui/material";
 import {tankSpeedUp} from "./service/tankSpeedUp";
 import {tankSpeedDown} from "./service/tankSpeedDown";
 
@@ -52,12 +52,12 @@ export const App = () => {
     const [directions, setDirections] = useState<[Direction, Direction]>([Direction.NEUTRAL, Direction.NEUTRAL]);
     const [tankStatus, setTankStatus] = useState<TankStatus>({} as TankStatus);
     const [speed, setSpeed] = useState<number>(100);
+    const [isJoystickSticky, setIsJoystickSticky] = useState<boolean>(false);
 
     useEffect(() => {
         getTankStatus().then((response) => {
             setTankStatus(response.data);
-            console.log(response.data);
-            // setSpeed(response.data.leftTank.speed);
+            setSpeed(response.data.leftTrack.speed);
         });
     }, []);
 
@@ -87,8 +87,10 @@ export const App = () => {
     const handleMove = (event: IJoystickUpdateEvent) => handleEvent(event);
 
     const handleStop = () => {
-        setDirections([Direction.NEUTRAL, Direction.NEUTRAL]);
-        moveTankStop();
+        if (!isJoystickSticky) {
+            setDirections([Direction.NEUTRAL, Direction.NEUTRAL]);
+            moveTankStop();
+        }
     }
 
     const handleTankClockwise = async () => {
@@ -162,7 +164,7 @@ export const App = () => {
                     <div className="joystick-container">
                         <Joystick
                             size={256}
-                            sticky={false}
+                            sticky={isJoystickSticky}
                             throttle={100}
                             baseColor="#282c34"
                             stickColor="black"
@@ -191,6 +193,14 @@ export const App = () => {
                         <button className="button" onClick={handleSpeedDown}>
                             <KeyboardDoubleArrowDownIcon className="speed-down" />
                         </button>
+                        <FormControlLabel
+                            control={
+                            <Checkbox
+                                checked={isJoystickSticky}
+                                onChange={() => setIsJoystickSticky(!isJoystickSticky)}
+                            />}
+                            label="Dir-Lock"
+                        />
                     </div>
                 </div>
 

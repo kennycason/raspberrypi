@@ -1,8 +1,8 @@
 export interface TankStatus {
-    leftTank: {
+    leftTrack: {
         speed: number;
     },
-    rightTank: {
+    rightTrack: {
         speed: number;
     }
 }

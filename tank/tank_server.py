@@ -85,11 +85,14 @@ def tank_rotate_counterclockwise():
 
 @app.route('/tank/speed-up', methods=['POST'])
 def tank_speed_up():
-    tank.speed_up()
-    return ""
+    return tank.speed_up()
 
 
 @app.route('/tank/speed-down', methods=['POST'])
 def tank_speed_down():
-    tank.speed_down()
-    return ""
+    return tank.speed_down()
+
+
+@app.route('/tank/speed/<speed>', methods=['POST'])
+def tank_set_speed(speed: str):
+    return tank.set_speed(int(speed))
