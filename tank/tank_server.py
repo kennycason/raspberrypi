@@ -47,27 +47,39 @@ def tank_turn_right():
     return ""
 
 
-@app.route('/tank/left-track-forward', methods=['POST'])
+@app.route('/tank/left-track/forward', methods=['POST'])
 def tank_left_track_forward():
     tank.left_track_forward()
     return ""
 
 
-@app.route('/tank/left-track-reverse', methods=['POST'])
+@app.route('/tank/left-track/reverse', methods=['POST'])
 def tank_left_track_reverse():
     tank.left_track_reverse()
     return ""
 
 
-@app.route('/tank/right-track-forward', methods=['POST'])
+@app.route('/tank/left-track/stop', methods=['POST'])
+def tank_left_track_stop():
+    tank.left_track_stop()
+    return ""
+
+
+@app.route('/tank/right-track/forward', methods=['POST'])
 def tank_right_track_forward():
     tank.right_track_forward()
     return ""
 
 
-@app.route('/tank/right-track-reverse', methods=['POST'])
+@app.route('/tank/right-track/reverse', methods=['POST'])
 def tank_right_track_reverse():
     tank.right_track_reverse()
+    return ""
+
+
+@app.route('/tank/right-track/stop', methods=['POST'])
+def tank_right_track_stop():
+    tank.right_track_stop()
     return ""
 
 
