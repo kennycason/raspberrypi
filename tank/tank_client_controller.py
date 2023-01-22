@@ -26,7 +26,7 @@ class TankClientController:
         requests.post(API_URL.format("/tank/stop"))
         running = True
         while running:
-git             for event in pygame.event.get():
+            for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
 
