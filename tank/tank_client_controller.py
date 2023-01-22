@@ -2,14 +2,13 @@ from enum import Enum
 
 import pygame
 import requests
+import os
+os.environ["SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"] = "1"
 
 pygame.init()
+pygame.event.set_grab(True)
 
-screen = pygame.display.set_mode((400, 300))
-pygame.display.set_caption("Controller Test")
-
-api_url = "http://spider.local:8080{}"
-
+API_URL = "http://spider.local:8080{}"
 
 class Direction(Enum):
     FORWARD = 1
@@ -17,18 +16,17 @@ class Direction(Enum):
     REVERSE = 3
 
 
-class TankPygameUI:
+class TankClientController:
 
     def __init__(self):
         self.left_track_direction = Direction.NEUTRAL
         self.right_track_direction = Direction.NEUTRAL
-        pass
 
     def start(self):
-        requests.post(api_url.format("/tank/stop"))
+        requests.post(API_URL.format("/tank/stop"))
         running = True
         while running:
-            for event in pygame.event.get():
+git             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
 
@@ -50,34 +48,33 @@ class TankPygameUI:
                 if left_joystick_y < -0.9:
                     if self.left_track_direction != Direction.FORWARD:
                         self.left_track_direction = Direction.FORWARD
-                        requests.post(api_url.format("/tank/left-track/forward"))
+                        requests.post(API_URL.format("/tank/left-track/forward"))
 
                 elif left_joystick_y > 0.9:
                     if self.left_track_direction != Direction.REVERSE:
                         self.left_track_direction = Direction.REVERSE
-                        requests.post(api_url.format("/tank/left-track/reverse"))
+                        requests.post(API_URL.format("/tank/left-track/reverse"))
                 else:
                     if self.left_track_direction != Direction.NEUTRAL:
                         self.left_track_direction = Direction.NEUTRAL
-                        requests.post(api_url.format("/tank/left-track/stop"))
+                        requests.post(API_URL.format("/tank/left-track/stop"))
 
                 if right_joystick_y < -0.9:
                     if self.right_track_direction != Direction.FORWARD:
                         self.right_track_direction = Direction.FORWARD
-                        requests.post(api_url.format("/tank/right-track/forward"))
+                        requests.post(API_URL.format("/tank/right-track/forward"))
 
                 elif right_joystick_y > 0.9:
                     if self.right_track_direction != Direction.REVERSE:
                         self.right_track_direction = Direction.REVERSE
-                        requests.post(api_url.format("/tank/right-track/reverse"))
+                        requests.post(API_URL.format("/tank/right-track/reverse"))
                 else:
                     if self.right_track_direction != Direction.NEUTRAL:
                         self.right_track_direction = Direction.NEUTRAL
-                        requests.post(api_url.format("/tank/right-track/stop"))
+                        requests.post(API_URL.format("/tank/right-track/stop"))
 
         pygame.quit()
 
 
-
-tank_joystick = TankPygameUI()
-tank_joystick.start()
+tank_client_controller = TankClientController()
+tank_client_controller.start()
